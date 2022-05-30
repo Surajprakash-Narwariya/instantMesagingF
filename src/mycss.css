@@ -1,0 +1,157 @@
+.bg_color {
+    background-color: #e3f2fd;
+    margin-bottom: 10px;
+}
+
+.btnCenter {
+    text-align: center;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    display: grid;
+}
+
+.mrgBottom {
+    margin-bottom: 1.5rem;
+}
+
+.mrgTop {
+    margin-top: 10rem;
+}
+
+.mrgRight {
+    margin-right: 30px;
+}
+
+.mrgLeft {
+    margin-left: 30px;
+}
+
+.txtsize {
+    font-size: 130%;
+}
+
+.txtDeco {
+    text-decoration: none;
+}
+
+/* .btn-secondary {
+    color: white;
+} */
+
+.vertical-center {
+    min-height: 100%; /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+}
+
+.validation {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+}
+
+.bd {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: #198754;
+}
+
+.chatComponent {
+    border: 5px solid red;
+}
+
+.circularImage {
+    border-radius: 50%;
+    height: 3rem;
+    width: 3rem;
+    margin-right: 2rem;
+}
+
+.card-body {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    color: #524b4a;
+    font-size: larger;
+}
+
+.card {
+    border-left-width: 0px;
+    border-right-width: 0px;
+}
+
+.text-wrap {
+    max-width: 20rem;
+}
+
+.fl {
+    float: left;
+    margin-bottom: 0.25rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.fr {
+    float: right;
+    margin-bottom: 0.25rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.smsbar {
+    position: absolute;
+    bottom: 0px;
+    position: sticky;
+    position: -webkit-sticky;
+    bottom: 10px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.fromName {
+    position: sticky;
+    top: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 0.75rem;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+#overf {
+    overflow: scroll;
+    height: 35.6rem;
+}
+
+.chatinterface {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-left: 2rem;
+}
+
+.searchbox {
+    float: right;
+}
+
+.mobile-screenshots img {
+    transform: rotate(22.5deg);
+    /* width: 7.6rem; */
+    width: 180px;
+    /* margin-left: 4rem; */
+}
+
+.screenshot1 {
+    margin-left: 8rem;
+}
+
+.textsize {
+    font-size: 5rem;
+}
