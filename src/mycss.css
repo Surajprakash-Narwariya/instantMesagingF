@@ -155,3 +155,8 @@
 .textsize {
     font-size: 5rem;
 }
+
+.about-text {
+    margin: 3rem;
+    font-size: 130%;
+}

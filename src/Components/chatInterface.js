@@ -1,4 +1,6 @@
+import React from 'react';
 import '../mycss.css';
+
 function ChatInterface(props) {
     const userName = props.data;
     console.log(userName);

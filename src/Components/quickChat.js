@@ -1,3 +1,4 @@
+import React from 'react';
 import ChatInterface from './chatInterface';
 import { useState, useEffect } from 'react';
 import { socket } from '../App';
@@ -24,6 +25,8 @@ function QuickChat() {
                     // console.log(response);
                 })
                 .catch((err) => console.log(err));
+        } else {
+            navigate('/login');
         }
     }, []);
 

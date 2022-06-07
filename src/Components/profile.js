@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function Profile() {
     const user = useSelector((state) => state);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!(user.userId !== null && user.userId !== '')) {
+            navigate('/login');
+        }
+    });
 
     const handleDelete = (e) => {
         axios
