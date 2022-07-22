@@ -1,162 +1,67 @@
-.bg_color {
-    background-color: #e3f2fd;
-    margin-bottom: 10px;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.btnCenter {
-    text-align: center;
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    display: grid;
-}
+body {
+    @font-face {
+        font-family: 'San Francisco';
+        font-weight: 400;
+        src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff');
+    }
+    font-family: -apple-system, BlinkMacSystemFont;
+    font-family: -apple-system, 'Helvetica Neue', 'Lucida Grande';
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 
-.mrgBottom {
-    margin-bottom: 1.5rem;
-}
+    background-image: url('') !important;
+    background-color: #f5f5f7 !important;
+    background-repeat: no-repeat !important;
 
-.mrgTop {
-    margin-top: 10rem;
-}
-
-.mrgRight {
-    margin-right: 30px;
-}
-
-.mrgLeft {
-    margin-left: 30px;
-}
-
-.txtsize {
-    font-size: 130%;
-}
-
-.txtDeco {
-    text-decoration: none;
-}
-
-/* .btn-secondary {
-    color: white;
-} */
-
-.vertical-center {
-    min-height: 100%; /* Fallback for browsers do NOT support vh unit */
-    min-height: 100vh; /* These two lines are counted as one :-)       */
-
-    display: flex;
-    align-items: center;
-}
-
-.validation {
-    width: 100%;
-    margin-top: 0.25rem;
-    font-size: 0.875em;
-}
-
-.bd {
-    font-weight: bold;
-    font-size: 150%;
+    background-size: 100vw 130vh !important;
 }
 
 .red {
-    color: red;
+    color: #995257;
 }
 
 .green {
-    color: #198754;
+    color: #155824;
 }
 
-.chatComponent {
-    border: 5px solid red;
+.bg {
+    background-color: #dcdcde;
+    opacity: 0.8;
+    background-size: 30px 30px;
+    background-image: repeating-linear-gradient(
+        0deg,
+        #782bda,
+        #782bda 1.5px,
+        #dcdcde 1.5px,
+        #dcdcde
+    );
 }
 
-.circularImage {
-    border-radius: 50%;
-    height: 3rem;
-    width: 3rem;
-    margin-right: 2rem;
+.show {
+    display: block !important;
 }
 
-.card-body {
-    padding-top: 0.4rem;
-    padding-bottom: 0.4rem;
-    color: #524b4a;
-    font-size: larger;
+.message {
+    font-size: 0.6rem;
 }
 
-.card {
-    border-left-width: 0px;
-    border-right-width: 0px;
+.height-scroll {
+    height: 94vh !important;
 }
 
-.text-wrap {
-    max-width: 20rem;
+.chat-width {
+    width: 60vw !important;
 }
 
-.fl {
-    float: left;
-    margin-bottom: 0.25rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+.contact-width {
+    width: 40vw !important;
 }
 
-.fr {
-    float: right;
-    margin-bottom: 0.25rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-}
-
-.smsbar {
-    position: absolute;
-    bottom: 0px;
-    position: sticky;
-    position: -webkit-sticky;
-    bottom: 10px;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-}
-
-.fromName {
-    position: sticky;
-    top: 2rem;
-    padding-top: 1rem;
-    padding-bottom: 0.75rem;
-    padding-right: 1.5rem;
-    padding-left: 1.5rem;
-}
-
-#overf {
-    overflow: scroll;
-    height: 35.6rem;
-}
-
-.chatinterface {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    margin-left: 2rem;
-}
-
-.searchbox {
-    float: right;
-}
-
-.mobile-screenshots img {
-    transform: rotate(22.5deg);
-    /* width: 7.6rem; */
-    width: 180px;
-    /* margin-left: 4rem; */
-}
-
-.screenshot1 {
-    margin-left: 8rem;
-}
-
-.textsize {
-    font-size: 5rem;
-}
-
-.about-text {
-    margin: 3rem;
-    font-size: 130%;
+.online {
+    color: green !important;
+    height: 2px !important;
+    width: 2px !important;
 }

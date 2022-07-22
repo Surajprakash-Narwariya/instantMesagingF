@@ -5,6 +5,7 @@ import { App } from './App';
 import userReducer from './Redux/reducers';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { ChakraProvider } from '@chakra-ui/react';
 
 const store = createStore(userReducer);
 store.subscribe(() => {
@@ -16,7 +17,9 @@ root.render(
     <Provider store={store}>
         <React.StrictMode>
             <BrowserRouter>
-                <App />
+                <ChakraProvider>
+                    <App />
+                </ChakraProvider>
             </BrowserRouter>
         </React.StrictMode>
     </Provider>

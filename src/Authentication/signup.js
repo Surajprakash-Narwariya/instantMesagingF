@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { url } from '../url';
 import axios from 'axios';
 
 function Signup() {
@@ -20,7 +21,7 @@ function Signup() {
         console.log('submitted');
 
         axios
-            .post('/signup', {
+            .post(`${url}/signup`, {
                 userId: userId,
                 name: name,
                 email: email,
@@ -71,134 +72,123 @@ function Signup() {
     };
 
     return (
-        <>
-            <div className='container-sm mrgTop'>
-                <div className='row justify-content-center mrgBottom'>
-                    <div className='col-md-6 '>
-                        <h1 className='text-center'> Register </h1>
+        <div className='container mx-auto mt-12'>
+            <div className=' w-11/12 md:w-2/3 mx-auto px-5 py-12 backdrop-blur-sm border rounded-lg border-gray-300'>
+                <div className='flex flex-row justify-center'>
+                    <div className='text-5xl mt-12 font-semibold'>
+                        <h1 className=''> Register</h1>
                     </div>
                 </div>
                 {response !== '' ? (
-                    <div className='row justify-content-center mrgBottom'>
-                        <div className='col-md-6 '>
-                            <h5
-                                className='text-center alert alert-danger'
-                                role='alert'
-                            >
+                    <div className='flex flex-row justify-center'>
+                        <div className='text-xl mt-8 bg-[#F8D7DA] text-[#995257] px-6 rounded-md py-2'>
+                            <h5 className='' role='alert'>
                                 {response}
                             </h5>
                         </div>
                     </div>
                 ) : (
-                    <div></div>
+                    ''
                 )}
-                <div className='row justify-content-center mrgBottom'>
-                    <div className='col-md-6 '>
-                        <div className='input-group flex-nowrap'>
-                            <span
-                                className='input-group-text'
-                                id='addon-wrapping'
-                            >
-                                @
-                            </span>
-                            <input
-                                type='text'
-                                className='form-control'
-                                placeholder='Username'
-                                aria-label='Username'
-                                aria-describedby='addon-wrapping'
-                                onChange={utilUserId}
-                            />
-                        </div>
-                        <div className={'validate ' + valUserId.clas}>
-                            {' '}
-                            {valUserId.msg}
+                <div className=' md:flex md:flex-col md:justify-center  '>
+                    <div className='mx-auto mt-8 text-gray-600  '>
+                        <div className='flex flex-col font-medium  text-xl'>
+                            <div className=''>
+                                <label className='block mt-2 mb-1'>
+                                    UserName{' '}
+                                </label>
+                                <input
+                                    type='text'
+                                    className='block border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full md:w-96 px-2 py-1'
+                                    onChange={utilUserId}
+                                    required
+                                />
+                                <div className={'text-sm ' + valUserId.clas}>
+                                    {' '}
+                                    {valUserId.msg}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className='row justify-content-center mrgBottom'>
-                    <div className='col-md-6 '>
-                        <div className='input-group flex-nowrap'>
-                            <span
-                                className='input-group-text'
-                                id='addon-wrapping'
-                            >
-                                $
-                            </span>
-                            <input
-                                type='text'
-                                className='form-control'
-                                placeholder='Full Name'
-                                aria-label='Username'
-                                aria-describedby='addon-wrapping'
-                                onChange={utilName}
-                            />
+
+                    <div className=' mx-auto mt-2 text-gray-600  '>
+                        <div className='flex flex-col font-medium  text-xl'>
+                            <div className=''>
+                                <label className='block mt-2 mb-1'>
+                                    Full Name{' '}
+                                </label>
+                                <input
+                                    type='text'
+                                    className='block border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full md:w-96 px-2 py-1'
+                                    aria-label='Username'
+                                    aria-describedby='addon-wrapping'
+                                    onChange={utilName}
+                                    required
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className='row justify-content-center mrgBottom'>
-                    <div className='col-md-6 '>
-                        <div className='input-group flex-nowrap'>
-                            <span
-                                className='input-group-text'
-                                id='addon-wrapping'
-                            >
-                                @
-                            </span>
-                            <input
-                                type='text'
-                                className='form-control'
-                                placeholder='Email'
-                                aria-label='Username'
-                                aria-describedby='addon-wrapping'
-                                onChange={utilEmail}
-                            />
-                        </div>
-                        <div className={'validate ' + valEmail.clas}>
-                            {' '}
-                            {valEmail.msg}
+
+                    <div className=' mx-auto mt-2 text-gray-600  '>
+                        <div className='flex flex-col font-medium  text-xl'>
+                            <div className=''>
+                                <label className='block mt-2 mb-1'>
+                                    Email{' '}
+                                </label>
+                                <input
+                                    type='text'
+                                    className='block border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full md:w-96 px-2 py-1'
+                                    aria-label='Username'
+                                    aria-describedby='addon-wrapping'
+                                    onChange={utilEmail}
+                                    required
+                                />
+                                <div className={'text-sm ' + valEmail.clas}>
+                                    {' '}
+                                    {valEmail.msg}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className='row justify-content-center mrgBottom'>
-                    <div className='col-md-6 '>
-                        <div className='input-group flex-nowrap'>
-                            <span
-                                className='input-group-text'
-                                id='addon-wrapping'
-                            >
-                                #
-                            </span>
-                            <input
-                                type='password'
-                                className='form-control'
-                                placeholder='Password'
-                                aria-label='Username'
-                                aria-describedby='addon-wrapping'
-                                onChange={utilPassword}
-                            />
-                        </div>
-                        <div className={'validate ' + valPassword.clas}>
-                            {' '}
-                            {valPassword.msg}
+
+                    <div className=' mx-auto mt-2 text-gray-600  '>
+                        <div className='flex flex-col font-medium  text-xl'>
+                            <div className='grow'>
+                                <label className='block mt-2 mb-1'>
+                                    Password{' '}
+                                </label>
+                                <input
+                                    type='password'
+                                    className='block  border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full md:w-96 px-2 py-1'
+                                    aria-label='Username'
+                                    aria-describedby='addon-wrapping'
+                                    onChange={utilPassword}
+                                    required
+                                />
+                                <div className={'text-sm ' + valPassword.clas}>
+                                    {' '}
+                                    {valPassword.msg}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className='row justify-content-center'>
-                    <div className='col-md-6 '>
-                        <div className='input-group flex-nowrap  btnCenter'>
-                            <button
-                                type='button'
-                                className='btn btn-primary'
-                                onClick={utilSubmit}
-                            >
-                                Submit
-                            </button>
+
+                    <div className=' mx-auto  mt-6 '>
+                        <div className=''>
+                            <div className=''>
+                                <button
+                                    type='button'
+                                    className=' text-lg border-2 border-black rounded-lg bg-[#313132] text-[#F0EBE3] px-4 py-1'
+                                    onClick={utilSubmit}
+                                >
+                                    Submit
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

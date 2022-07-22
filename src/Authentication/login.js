@@ -3,11 +3,12 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+import { url } from '../url';
 function LogOut() {
     return (
         <div>
-            <button className='btn btn-secondary'>Log Out</button>
+            Log Out
+            {/* <button className='btn btn-secondary'>Log Out</button> */}
         </div>
     );
 }
@@ -50,7 +51,7 @@ function Login() {
         // e.preventDefault();
         if (password.length >= 6 && userId.length >= 6) {
             axios
-                .post('/login', {
+                .post(`${url}/login`, {
                     userId: userId,
                     password: password,
                 })
@@ -66,11 +67,19 @@ function Login() {
                                 email: response.headers.email,
                             },
                         });
-                        // console.log(response.headers);
-                        document.cookie = `jwt=${response.headers.jwt}`;
+                        console.log(response.headers);
+                        // document.cookie = `jwt=${response.headers.jwt}; sameSite: none; secure : true`;
                         document.cookie = `userId=${response.headers.userid}`;
                         document.cookie = `name=${response.headers.name}`;
                         document.cookie = `email=${response.headers.email}`;
+                        // document.cookie = `imageAddress=${response.headers.imageAddress}`;
+
+                        localStorage.setItem(
+                            'imageAddress',
+                            `${response.headers.imageaddress}`
+                        );
+                        // console.log(response.headers.imageaddress);
+
                         setVerified(true);
                     }
 
@@ -87,87 +96,86 @@ function Login() {
 
     return (
         <>
-            <form className='container-sm mrgTop'>
-                <div className='row justify-content-center mrgBottom'>
-                    <div className='col-md-6 '>
-                        <h1 className='text-center'> Login</h1>
-                    </div>
-                </div>
-                {message !== '' ? (
-                    <div className='row justify-content-center mrgBottom'>
-                        <div className='col-md-6 '>
-                            <h5
-                                className='text-center alert alert-danger'
-                                role='alert'
-                            >
-                                {' '}
-                                {message}
-                            </h5>
+            <form className='container mx-auto mt-12  '>
+                <div className=' w-11/12 md:w-2/3 mx-auto px-5 py-12 backdrop-blur-sm border rounded-lg border-gray-300  '>
+                    <div className='flex flex-row justify-center'>
+                        <div className='text-5xl mt-12 font-semibold'>
+                            <h1 className=''> Login</h1>
                         </div>
                     </div>
-                ) : (
-                    <div></div>
-                )}
-                <div className='row justify-content-center mrgBottom'>
-                    <div className='col-md-6 '>
-                        <div className='input-group flex-nowrap'>
-                            <span
-                                className='input-group-text'
-                                id='addon-wrapping'
-                            >
-                                @
-                            </span>
-                            <input
-                                type='text'
-                                className='form-control'
-                                placeholder='Username'
-                                aria-label='Username'
-                                aria-describedby='addon-wrapping'
-                                onChange={handleUserId}
-                                required
-                            />
+                    {message !== '' ? (
+                        <div className='flex flex-row justify-center'>
+                            <div className='text-xl mt-8 bg-[#F8D7DA] text-[#995257] px-6 rounded-md py-2'>
+                                <h5 className='' role='alert'>
+                                    {message}
+                                </h5>
+                            </div>
                         </div>
-                        <div className={'validate ' + valUserId.clas}>
-                            {' '}
-                            {valUserId.msg}
+                    ) : (
+                        <div></div>
+                    )}
+
+                    <div className='md:flex md:flex-col md:justify-center'>
+                        <div className='mx-auto mt-8 text-gray-600  '>
+                            <div className='flex flex-col font-medium  text-xl'>
+                                <div className=''>
+                                    <label className='flex mt-2 mb-1'>
+                                        Username{' '}
+                                    </label>
+                                    <input
+                                        type='text'
+                                        className=' flex border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full md:w-96 px-2 py-1'
+                                        aria-label='Username'
+                                        aria-describedby='addon-wrapping'
+                                        onChange={handleUserId}
+                                        required
+                                    />
+                                    <div
+                                        className={'text-sm ' + valUserId.clas}
+                                    >
+                                        {' '}
+                                        {valUserId.msg}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div className='row justify-content-center mrgBottom'>
-                    <div className='col-md-6 '>
-                        <div className='input-group flex-nowrap'>
-                            <span
-                                className='input-group-text'
-                                id='addon-wrapping'
-                            >
-                                #
-                            </span>
-                            <input
-                                type='password'
-                                className='form-control'
-                                placeholder='Password'
-                                aria-label='Username'
-                                aria-describedby='addon-wrapping'
-                                onChange={handlePassword}
-                                required
-                            />
+                        <div className=' mx-auto mt-2 text-gray-600'>
+                            <div className='flex flex-col font-medium  text-xl '>
+                                <div className=''>
+                                    <label className='flex mt-2 mb-1'>
+                                        Password
+                                    </label>
+                                    <input
+                                        type='password'
+                                        className=' flex  border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full md:w-96 px-2 py-1'
+                                        aria-label='Username'
+                                        aria-describedby='addon-wrapping'
+                                        onChange={handlePassword}
+                                        required
+                                    />
+                                    <div
+                                        className={
+                                            'text-sm ' + valpassword.clas
+                                        }
+                                    >
+                                        {' '}
+                                        {valpassword.msg}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className={'validate ' + valpassword.clas}>
-                            {' '}
-                            {valpassword.msg}
-                        </div>
-                    </div>
-                </div>
-                <div className='row justify-content-center'>
-                    <div className='col-md-6 '>
-                        <div className='input-group flex-nowrap  btnCenter'>
-                            <button
-                                type='button'
-                                className='btn btn-primary'
-                                onClick={handleSubmit}
-                            >
-                                Submit
-                            </button>
+                        <div className=' mx-auto  mt-6 '>
+                            <div className=''>
+                                <div className=''>
+                                    <button
+                                        type='button'
+                                        className=' text-xl border-2 border-black rounded-lg bg-[#313132] text-[#F0EBE3] px-4 py-1'
+                                        onClick={handleSubmit}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
