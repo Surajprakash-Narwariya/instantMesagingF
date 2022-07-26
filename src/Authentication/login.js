@@ -5,12 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { url } from '../url';
 function LogOut() {
-    return (
-        <div>
-            Log Out
-            {/* <button className='btn btn-secondary'>Log Out</button> */}
-        </div>
-    );
+    return <div>Log Out</div>;
 }
 
 function Login() {
@@ -59,19 +54,44 @@ function Login() {
                     setMessage(response.data);
                     // console.log(response.headers.jwt);
                     if (response.data === 'User is verified') {
+                        let privateKey = document.cookie.replace(
+                            /(?:(?:^|.*;\s*)privateKey\s*\=\s*([^;]*).*$)|^.*$/,
+                            '$1'
+                        );
+
+                        let publicKey = document.cookie.replace(
+                            /(?:(?:^|.*;\s*)publicKey\s*\=\s*([^;]*).*$)|^.*$/,
+                            '$1'
+                        );
+
+                        // console.log(privateKey);
+                        // console.log(publicKey);
+
                         dispatch({
                             type: 'addUser',
                             payload: {
                                 userId: response.headers.userid,
                                 name: response.headers.name,
                                 email: response.headers.email,
+                                privateKey: privateKey,
+                                publicKey: publicKey,
                             },
                         });
                         console.log(response.headers);
+                        localStorage.setItem(
+                            'privateKey',
+                            response.headers.privatekey
+                        );
+                        localStorage.setItem(
+                            'publicKey',
+                            response.headers.publickey
+                        );
+                        console.log(response.headers.privatekey);
                         // document.cookie = `jwt=${response.headers.jwt}; sameSite: none; secure : true`;
                         document.cookie = `userId=${response.headers.userid}`;
                         document.cookie = `name=${response.headers.name}`;
                         document.cookie = `email=${response.headers.email}`;
+                        // document.cookie = `privateKey=${response.headers.privateKey}`;
                         // document.cookie = `imageAddress=${response.headers.imageAddress}`;
 
                         localStorage.setItem(
@@ -82,9 +102,6 @@ function Login() {
 
                         setVerified(true);
                     }
-
-                    // console.log(response.headers.name);
-                    // console.log(response.headers.email);
                 })
                 .catch((err) => {
                     console.log(err);

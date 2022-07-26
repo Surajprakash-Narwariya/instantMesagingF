@@ -56,6 +56,8 @@ function NavBar() {
                 userId: null,
                 name: null,
                 email: null,
+                privateKey: null,
+                publicKey: null,
             },
         });
         setIsAuthenticated(null);
@@ -206,13 +208,13 @@ function NavBar() {
 function Application() {
     const [data, setData] = useState({
         from: 'Surajprakash',
-        to: 'Team@QuickChat',
+        chatName: 'funtoozzzzz',
         imageAddress: '',
     });
 
     useEffect(() => {
         // window.location.reload();
-        console.log(data);
+        // console.log(data);
     }, [data]);
 
     const getData = (data) => {
@@ -222,7 +224,7 @@ function Application() {
 
     return (
         <div className='container mx-auto  '>
-            <div className='flex flex-row justify-center'>
+            <div className='flex flex-row'>
                 <QuickChat data={getData} />
                 <Chat data={data} />
             </div>

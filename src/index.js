@@ -6,6 +6,10 @@ import userReducer from './Redux/reducers';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { ChakraProvider } from '@chakra-ui/react';
+import { Buffer } from 'buffer';
+import './polyfill';
+window.Buffer = window.Buffer || require('buffer/').Buffer;
+var cryptoBrowserify = require('crypto-browserify');
 
 const store = createStore(userReducer);
 store.subscribe(() => {

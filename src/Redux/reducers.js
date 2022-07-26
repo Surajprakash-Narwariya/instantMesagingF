@@ -19,6 +19,8 @@ function getInitialState() {
         userId: getCookie(document.cookie, 'userId'),
         name: getCookie(document.cookie, 'name'),
         email: getCookie(document.cookie, 'email'),
+        publicKey: getCookie(document.cookie, 'publicKey'),
+        privateKey: getCookie(document.cookie, 'privateKey'),
     };
 }
 
@@ -37,6 +39,8 @@ function userReducer(state = getInitialState(), action) {
                 userId: action.payload.userId,
                 name: action.payload.name,
                 email: action.payload.email,
+                privatekey: action.payload.privatekey,
+                publicKey: action.payload.publicKey,
             };
 
         case 'deleteUser':
@@ -46,6 +50,8 @@ function userReducer(state = getInitialState(), action) {
                 userId: action.payload.userId,
                 name: action.payload.name,
                 email: action.payload.email,
+                privatekey: action.payload.privatekey,
+                publicKey: action.payload.publicKey,
             };
 
         default:

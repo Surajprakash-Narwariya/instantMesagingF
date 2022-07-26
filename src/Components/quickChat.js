@@ -17,6 +17,9 @@ function QuickChat(props) {
     const [contact, setContact] = useState([]);
     console.log(props);
 
+    // const sd = useSelector((state) => state);
+    // console.log(sd);
+
     socket.emit('login', {
         user: curUser,
     });
@@ -148,6 +151,7 @@ function QuickChat(props) {
             axios
                 .post(`${url}/connect`, {
                     senderId: curUser,
+
                     receiverId: userName,
                 })
                 .then((response) => {

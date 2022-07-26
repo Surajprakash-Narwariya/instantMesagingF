@@ -5,6 +5,11 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import SingleMessage from './singleMsg';
 import { url } from '../url';
+import {
+    encryptMessage,
+    decryptMessage,
+    decryptChat,
+} from '../Authentication/keys';
 
 import {
     Modal,
@@ -29,12 +34,14 @@ function Chat(props) {
     const [chats, setChats] = useState([]);
     const [online, setOnline] = useState();
     const [chatName, setChatName] = useState();
+    const [publicKey, setPublicKey] = useState({});
 
-    var from = '';
-    var to = '';
+    var from = 'shriRam';
+    var to = 'JaiRam';
     var imageAddress = '';
 
     const { state } = useLocation();
+    // console.log(props.data);
 
     if (state === null) {
         from = userId;
@@ -48,14 +55,7 @@ function Chat(props) {
         to = state.to;
         imageAddress = state.imageAddress;
     }
-    console.log(from);
-
-    // console.log(props);
-    // const { from, to, imageAddress } = state;
-
-    // const from = userId;
-    // const to = props.data.chatName;
-    // const imageAddress = props.data.imageAddress;
+    // console.log(from, to);
 
     const OverlayOne = () => (
         <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(8px) ' />
@@ -66,7 +66,7 @@ function Chat(props) {
     const [overlay, setOverlay] = useState(<OverlayOne />);
 
     useEffect(() => {
-        console.log('Scroll function is active');
+        // console.log('Scroll function is active');
 
         if (chats.length > 0) {
             const elm = document.getElementById(chats.length - 1);
@@ -92,47 +92,43 @@ function Chat(props) {
                 { withCredentials: true }
             )
             .then((response) => {
-                setChats(response.data);
-                console.log(response.data);
+                setChats(response.data.chats);
+
+                // var chat = decryptChat(response.data.chats, userId);
+
+                // setChats(chat);
+
+                setPublicKey({
+                    pk1: response.data.pk1,
+                    pk2: response.data.pk2,
+                });
+
+                // console.log(response.data.pk1);
+                // console.log(response.data);
             })
             .catch((er) => console.log(er));
     }, [chatName]);
 
-    const checkStatus = () => {
-        // console.log('checkstatus');
-        socket.emit(
-            'is-online',
+    // const checkStatus = () => {
+    //     socket.emit(
+    //         'is-online',
 
-            {
-                userId: to,
-                sendTo: from,
-            }
-        );
-    };
+    //         {
+    //             userId: to,
+    //             sendTo: from,
+    //         }
+    //     );
+    // };
 
-    useEffect(() => {
-        setInterval(checkStatus, 10000);
+    // useEffect(() => {
+    //     setInterval(checkStatus, 10000);
 
-        return () => {
-            clearInterval();
-        };
-    });
+    //     return () => {
+    //         clearInterval();
+    //     };
+    // });
 
-    useEffect(() => {
-        // console.log('useEffect is runned');
-        const data = (info) => {
-            console.log(info.isOnline);
-            if (info.isOnline !== online) {
-                setOnline(info.isOnline);
-            }
-        };
-        socket.on('is-online', data);
-
-        return () => {
-            socket.off('is-online', data);
-        };
-    }, []);
-    // const getStatus = () => {
+    // useEffect(() => {
     //     const data = (info) => {
     //         console.log(info.isOnline);
     //         if (info.isOnline !== online) {
@@ -140,25 +136,24 @@ function Chat(props) {
     //         }
     //     };
     //     socket.on('is-online', data);
-    // };
+
+    //     return () => {
+    //         socket.off('is-online', data);
+    //     };
+    // }, []);
 
     useEffect(() => {
         // for realtime communication of the two users
         console.log('receiveing mesage useEFFECT');
         // console.log('useeffect with socket in chat');
         var addMessage = (msg) => {
-            // console.log(msg.fromUserId);
-            // console.log(to);
             if (msg.fromUserId === to) {
                 setChats((prev) => [...prev, msg]);
                 console.log(chats);
             }
         };
 
-        // console.log(chats[chats.length - 1]);
-
         socket.on('private-msg', addMessage);
-        // console.log(chats);
 
         return () => {
             socket.off('private-msg', addMessage);
@@ -174,43 +169,32 @@ function Chat(props) {
         if (msg.length === 0) {
             return;
         }
-        // console.log(msg);
-        // var to = userId === 'Suraj99' ? 'rajnikant' : 'Suraj99';
 
         var today = new Date().toLocaleString('en-GB', {
             timeZone: 'IST',
         });
-        // console.log(today);
+
+        let encrypMsg = encryptMessage(publicKey, msg);
 
         socket.emit('private-msg', {
             fromUserId: from,
             toUserId: to,
-            message: msg,
+            message: encrypMsg,
             time: today,
         });
 
         setChats((prev) => [
             ...prev,
-            { fromUserId: from, toUserId: to, message: msg, time: today },
+            { fromUserId: from, toUserId: to, message: encrypMsg, time: today },
         ]);
 
         document.getElementById('userMsg').value = '';
-
-        // if (chats.length > 0) {
-        //     const elm = document.getElementById(chats.length - 1);
-        //     elm.scrollIntoView({
-        //         behavior: 'smooth',
-        //         block: 'center',
-        //         alignToTop: true,
-        //     });
-        // }
     };
 
     const deleteMessage = (e) => {
         e.preventDefault();
         onClose();
         const data = toDeleted;
-        // console.log(data.index);
 
         axios
             .post(
@@ -230,8 +214,6 @@ function Chat(props) {
                     };
                     setChats(chat);
                 }
-
-                // console.log(index);
             })
             .catch((err) => {
                 console.log(err);
@@ -239,8 +221,6 @@ function Chat(props) {
     };
 
     const chatClick = (e, data, index) => {
-        // return <BackdropExample />;
-        // console.log(index);
         setToDeleted({ ...data, index: index });
         setOverlay(<OverlayOne />);
         onOpen();
