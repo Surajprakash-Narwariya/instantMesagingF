@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { url } from '../url';
+import Spinner from '../Components/spinner';
 import axios from 'axios';
 
 function Signup() {
@@ -11,6 +12,7 @@ function Signup() {
     const [password, setPassword] = useState('');
     const [response, setResponse] = useState('');
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     const [valUserId, setValUserId] = useState({ msg: '', clas: '' });
     const [valPassword, setValPassword] = useState({ msg: '', clas: '' });
@@ -18,7 +20,8 @@ function Signup() {
 
     const utilSubmit = (e) => {
         // e.preventDefault();
-        console.log('submitted');
+        setIsLoading(true);
+        // console.log('submitted');
 
         axios
             .post(`${url}/signup`, {
@@ -31,6 +34,7 @@ function Signup() {
                 // console.log(response);
                 if (response.data !== 'Success') {
                     setResponse(response.data);
+                    setIsLoading(false);
                 } else {
                     navigate('/login');
                 }
@@ -182,13 +186,17 @@ function Signup() {
                     <div className=' mx-auto  mt-6 '>
                         <div className=''>
                             <div className=''>
-                                <button
-                                    type='button'
-                                    className=' text-lg border-2 border-black rounded-lg bg-[#313132] text-[#F0EBE3] px-4 py-1'
-                                    onClick={utilSubmit}
-                                >
-                                    Submit
-                                </button>
+                                {isLoading ? (
+                                    <Spinner />
+                                ) : (
+                                    <button
+                                        type='button'
+                                        className=' text-lg border-2 border-black rounded-lg bg-[#313132] text-[#F0EBE3] px-4 py-1'
+                                        onClick={utilSubmit}
+                                    >
+                                        Submit
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>

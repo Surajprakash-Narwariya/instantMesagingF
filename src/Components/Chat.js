@@ -10,7 +10,7 @@ import {
     decryptMessage,
     decryptChat,
 } from '../Authentication/keys';
-
+import Spinner from './spinner';
 import {
     Modal,
     ModalOverlay,
@@ -35,6 +35,7 @@ function Chat(props) {
     const [online, setOnline] = useState();
     const [chatName, setChatName] = useState();
     const [publicKey, setPublicKey] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     var from = 'shriRam';
     var to = 'JaiRam';
@@ -80,6 +81,7 @@ function Chat(props) {
     useEffect(() => {
         // fetch data from the chat server and display
         // console.log('post request frm useeffect in chat');
+        setIsLoading(true);
         axios
             .post(
                 `${url}/getchatdata`,
@@ -95,6 +97,7 @@ function Chat(props) {
 
                 var chat = decryptChat(userId, response.data.chats);
                 setChats(chat);
+                setIsLoading(false);
 
                 setPublicKey({
                     pk1: response.data.pk1,
@@ -128,7 +131,7 @@ function Chat(props) {
 
     useEffect(() => {
         const data = (info) => {
-            console.log(info.isOnline);
+            // console.log(info.isOnline);
             if (info.isOnline !== online) {
                 setOnline(info.isOnline);
             }
@@ -153,7 +156,7 @@ function Chat(props) {
                 const obj = { ...msg, message: decryptMsg };
 
                 setChats((prev) => [...prev, obj]);
-                console.log(chats);
+                // console.log(chats);
             }
         };
 
@@ -209,7 +212,7 @@ function Chat(props) {
                 }
             )
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 if (res.data === 'Message Deleted Successfully!') {
                     var chat = [...chats];
                     chat[data.index] = {
@@ -281,45 +284,46 @@ function Chat(props) {
                             </span>
                         </div>
                     </div>
-                    <div className='flex flex-col last:pb-4 pt-2 border-2 rounded-t-[2rem] pb-20 h-screen overflow-y-auto backdrop-blur-3xl bg-white bg-opacity-70 '>
-                        {chats.length > 0
-                            ? chats.map((item, ind) => (
-                                  <div
-                                      className='mx-1 first:mt-14 '
-                                      key={ind + 'head'}
-                                  >
-                                      <div className='mb-2' key={ind + 'date'}>
-                                          {ind > 1 &&
-                                          chats[ind - 1].time != null &&
-                                          item.time != null &&
-                                          chats[ind - 1].time.substring(
-                                              0,
-                                              10
-                                          ) !== item.time.substring(0, 10) ? (
-                                              <DateShow date={item.time} />
-                                          ) : (
-                                              ''
-                                          )}
-                                      </div>
 
-                                      <div
-                                          className='flex-1 mb-1'
-                                          id={ind}
-                                          key={ind + 'message'}
-                                          onClick={(e) =>
-                                              chatClick(e, item, ind)
-                                          }
-                                      >
-                                          <SingleMessage
-                                              data={item}
-                                              key={ind}
-                                              currUser={userId}
-                                          />
-                                          {/* <BackdropExample /> */}
-                                      </div>
-                                  </div>
-                              ))
-                            : ''}
+                    <div className='flex flex-col last:pb-4 pt-2 border-2 rounded-t-[2rem] pb-20 h-screen overflow-y-auto backdrop-blur-3xl bg-white bg-opacity-70 '>
+                        {chats.length > 0 ? (
+                            chats.map((item, ind) => (
+                                <div
+                                    className='mx-1 first:mt-14 '
+                                    key={ind + 'head'}
+                                >
+                                    <div className='mb-2' key={ind + 'date'}>
+                                        {ind > 1 &&
+                                        chats[ind - 1].time != null &&
+                                        item.time != null &&
+                                        chats[ind - 1].time.substring(0, 10) !==
+                                            item.time.substring(0, 10) ? (
+                                            <DateShow date={item.time} />
+                                        ) : (
+                                            ''
+                                        )}
+                                    </div>
+
+                                    <div
+                                        className='flex-1 mb-1'
+                                        id={ind}
+                                        key={ind + 'message'}
+                                        onClick={(e) => chatClick(e, item, ind)}
+                                    >
+                                        <SingleMessage
+                                            data={item}
+                                            key={ind}
+                                            currUser={userId}
+                                        />
+                                        {/* <BackdropExample /> */}
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className='flex justify-center mt-20'>
+                                {isLoading ? <Spinner /> : ''}
+                            </div>
+                        )}
                     </div>
                     <div className='flex  pt-2 pb-6 flex-row items-center justify-center absolute bottom-0 w-full md:w-[60vw]    backdrop-blur-lg'>
                         <form className='flex flex-row flex-1 '>

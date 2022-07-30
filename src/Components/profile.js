@@ -13,7 +13,7 @@ function Profile() {
 
     const link = `${url}/image/${localStorage.getItem('imageAddress')}`;
 
-    console.log(localStorage.getItem('imageAddress'));
+    // console.log(localStorage.getItem('imageAddress'));
 
     useEffect(() => {
         if (!(user.userId !== null && user.userId !== '')) {
@@ -28,7 +28,7 @@ function Profile() {
             })
             .then((response) => {
                 if (response.data.success === true) {
-                    console.log('should be loged out');
+                    // console.log('should be loged out');
 
                     document.cookie =
                         'jwt= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
@@ -55,20 +55,20 @@ function Profile() {
 
     const imageUpdate = async (e) => {
         const image = e.target.files[0];
-        console.log(image);
+        // console.log(image);
 
         var imageAddress = '';
 
         let data = new FormData();
         data.append('file', image);
 
-        console.log(data);
+        // console.log(data);
 
         try {
             if (image) {
                 const response = await axios.post(`${url}/upload`, data);
                 if (response) {
-                    console.log(response);
+                    // console.log(response);
                     imageAddress = response.data;
                 }
             }
@@ -83,8 +83,8 @@ function Profile() {
                     userId: user.userId,
                     imageAddress: imageAddress,
                 });
-                console.log(updateFileName.data);
-                console.log(imageAddress);
+                // console.log(updateFileName.data);
+                // console.log(imageAddress);
                 localStorage.setItem('imageAddress', imageAddress.file);
                 window.location.reload();
             }

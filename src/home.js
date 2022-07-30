@@ -7,7 +7,7 @@ function Home() {
                             unexpected focus on privacy, combined with all of
                             the features you expect. */}
 
-            <div className='mt-10 text-[#F5F5F5] text'>
+            <div className='mt-10 text-gray-900 text'>
                 <span className='block text-3xl md:text-5xl font-bold'>
                     Say "hello" to a different messaging experience.
                 </span>

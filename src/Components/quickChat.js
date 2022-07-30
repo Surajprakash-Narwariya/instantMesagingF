@@ -8,6 +8,7 @@ import axios from 'axios';
 import Chat from './Chat';
 import { url } from '../url';
 import { decryptMessage } from '../Authentication/keys';
+import Spinner from './spinner';
 
 function QuickChat(props) {
     const curUser = useSelector((state) => state.userId);
@@ -16,6 +17,7 @@ function QuickChat(props) {
     const [s, setS] = useState('');
     const [contacts, setContacts] = useState([]);
     const [contact, setContact] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     // const sd = useSelector((state) => state);
     // console.log(sd);
@@ -37,7 +39,7 @@ function QuickChat(props) {
 
         //
         // if(window.innerWidth > 600)
-        console.log(window.innerWidth);
+        // console.log(window.innerWidth);
 
         if (window.innerWidth > 768) {
             props.data(item);
@@ -55,6 +57,7 @@ function QuickChat(props) {
     };
 
     const allDataPoint = async () => {
+        setIsLoading(true);
         const contacts = await getContacts();
         // console.log(contacts.data[0]);
         const lastmsg = await getLastMessage(contacts.data);
@@ -93,6 +96,7 @@ function QuickChat(props) {
         }
 
         setContact(chatInterfaceData);
+        setIsLoading(false);
     };
 
     const getProfilePicture = async (contacts) => {
@@ -173,7 +177,7 @@ function QuickChat(props) {
                     receiverId: userName,
                 })
                 .then((response) => {
-                    console.log(response.data);
+                    // console.log(response.data);
                 });
             document.getElementById('inputUsername').value = '';
             navigate('/chat', { state: { to: userName, from: curUser } });
@@ -256,26 +260,31 @@ function QuickChat(props) {
                             </div>
                         </div>
                     </div>
-
-                    <div className='  rounded-[2rem] mb-1 mx-0 px-0 mt-3 bg-[#f5f5f7]'>
-                        {contact.length > 0
-                            ? contact.map((item, ind) => {
-                                  return (
-                                      <div
-                                          onClick={(e) => openChat(e, item)}
-                                          key={ind + 'div'}
-                                          className=' first:pt-2 last:pb-2 '
-                                      >
-                                          <ChatInterface
-                                              key={ind}
-                                              data={item}
-                                              id={ind}
-                                          />
-                                      </div>
-                                  );
-                              })
-                            : ''}
-                    </div>
+                    {isLoading ? (
+                        <div className='flex justify-center '>
+                            <Spinner />
+                        </div>
+                    ) : (
+                        <div className='  rounded-[2rem] mb-1 mx-0 px-0 mt-3 bg-[#f5f5f7]'>
+                            {contact.length > 0
+                                ? contact.map((item, ind) => {
+                                      return (
+                                          <div
+                                              onClick={(e) => openChat(e, item)}
+                                              key={ind + 'div'}
+                                              className=' first:pt-2 last:pb-2 '
+                                          >
+                                              <ChatInterface
+                                                  key={ind}
+                                                  data={item}
+                                                  id={ind}
+                                              />
+                                          </div>
+                                      );
+                                  })
+                                : ''}
+                        </div>
+                    )}
                 </div>
             </div>
         </>
