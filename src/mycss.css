@@ -65,10 +65,9 @@ body {
 }
 
 .shape-blob {
+    overflow: hidden;
     background: #5386e4;
-    /*
-    height: 200px;
-    width: 200px;*/
+
     height: 0vh;
     width: 0vw;
     border-radius: 30% 50% 20% 40%;
@@ -76,10 +75,11 @@ body {
         movement_one 40s ease-in-out infinite both;
     opacity: 0.9;
     position: absolute;
-    left: 50%;
-    top: 40%;
+    left: 0%;
+    top: 0%;
     z-index: -10;
 }
+
 .shape-blob.one {
     /* height: 500px; */
     z-index: -10;
@@ -92,8 +92,9 @@ body {
     animation: transform 30s ease-in-out infinite both alternate,
         movement_two 60s ease-in-out infinite both;
 }
-
+/*
 .shape-blob.two {
+    overflow: hidden;
     height: 0vh;
     width: 0vw;
     z-index: -10;
@@ -103,6 +104,7 @@ body {
     animation: transform 30s ease-in-out infinite both alternate,
         movement_two 60s ease-in-out infinite both;
 }
+*/
 
 @keyframes transform {
     0%,

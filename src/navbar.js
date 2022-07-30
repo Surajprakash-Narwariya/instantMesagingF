@@ -184,7 +184,7 @@ function NavBar() {
                 </div>
                 {/* <Link to='/chat'>Chat</Link> */}
             </nav>
-            {/* {console.log(screenSize)} */}
+            {/* {(screenSize)} */}
             <Routes>
                 <Route path='/signup' element={<Signup />} />
                 <Route exact path='/' element={<Home />} />
