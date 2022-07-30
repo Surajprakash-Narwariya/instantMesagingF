@@ -4,8 +4,8 @@ import './mycss.css';
 
 import { io } from 'socket.io-client';
 
-const url = 'http://localhost:4000';
-// const url = 'https://api-quickchat.herokuapp.com';
+// const url = 'http://localhost:4000';
+const url = 'https://api-quickchat.herokuapp.com';
 
 const socket = io(url);
 
