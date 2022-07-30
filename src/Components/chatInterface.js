@@ -14,7 +14,7 @@ function ChatInterface(props) {
 
     return (
         <div
-            className='border-b last:border-none  rounded-xl group border-gray-300 my-1 py-2 hover:bg-blue-500 '
+            className='border-b last:border-none  rounded-xl group  my-1 py-2 hover:bg-[#FED18C]  '
             id={userName}
         >
             <div className='' id={userName}>
@@ -44,17 +44,17 @@ function ChatInterface(props) {
                     </span>
                     <div className='flex flex-col flex-1 '>
                         <span
-                            className='text-lg mx-4 text-gray-800 font-semibold group-hover:text-slate-100'
+                            className='text-lg mx-4 text-gray-800 font-semibold group-hover:text-[#5386E4]'
                             id={userName}
                         >
                             {userName}
                         </span>
-                        <span className='mx-4 text-sm text-gray-600 font-medium group-hover:text-slate-200'>
+                        <span className='mx-4 text-sm text-gray-600 font-medium group-hover:text-slate-500'>
                             {' '}
                             {message}{' '}
                         </span>
                     </div>
-                    <span className='text-xs text-gray-600 pr-5 font-medium group-hover:text-slate-200 '>
+                    <span className='text-xs text-gray-600 pr-5 font-medium group-hover:text-slate-500 '>
                         {today.substring(0, 10) === time.substring(0, 10)
                             ? time.substring(12, 17)
                             : time.substring(0, 10)}

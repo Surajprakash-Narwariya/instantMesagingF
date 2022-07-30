@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import Chat from './Chat';
 import { url } from '../url';
+import { decryptMessage } from '../Authentication/keys';
 
 function QuickChat(props) {
     const curUser = useSelector((state) => state.userId);
@@ -15,7 +16,6 @@ function QuickChat(props) {
     const [s, setS] = useState('');
     const [contacts, setContacts] = useState([]);
     const [contact, setContact] = useState([]);
-    console.log(props);
 
     // const sd = useSelector((state) => state);
     // console.log(sd);
@@ -66,9 +66,27 @@ function QuickChat(props) {
         var chatInterfaceData = [];
 
         for (var i = 0; i < contacts.data.length; i++) {
+            // console.log(lastmsg.data[i]);
+
+            // var decryptedMsg = decryptChat(curUser, lastmsg.data[i].chats[0]);
+            // console.log(lastmsg.data[i].chats[0]);
+            var decryptedMsg = '';
+            var msg = lastmsg.data[i].chats[0].message.split(' ');
+            if (lastmsg.data[i].chats[0].fromUserId === curUser) {
+                decryptedMsg = decryptMessage(
+                    localStorage.getItem('privateKey'),
+                    msg[0]
+                );
+            } else {
+                decryptedMsg = decryptMessage(
+                    localStorage.getItem('privateKey'),
+                    msg[1]
+                );
+            }
+
             chatInterfaceData[i] = {
                 chatName: contacts.data[i],
-                message: lastmsg.data[i].chats[0].message,
+                message: decryptedMsg,
                 time: lastmsg.data[i].chats[0].time,
                 imageAddress: image.data[i].imageAddress,
             };
@@ -180,17 +198,17 @@ function QuickChat(props) {
 
     return (
         <>
-            <div className=' w-full md:w-[40vw] h-screen overflow-y-auto backdrop-blur-lg m-0  bg-black bg-opacity-10 '>
+            <div className=' w-full md:w-[40vw] h-screen overflow-y-auto backdrop-blur-3xl m-0  bg-white bg-opacity-70 '>
                 {' '}
-                <div className=' border-l border-t p-2 rounded-l-lg border-gray-300'>
+                <div className=' border-l border-t  rounded-l-lg border-gray-300'>
                     <div className='flex flex-row  py-4      '>
-                        <div className='flex flex-col w-100 ml-2  '>
+                        <div className='flex flex-col w-full ml-2  '>
                             <div className='text-3xl font-bold text-gray-800 '>
                                 Messages
                             </div>
-                            <div className=' flex flex-row relative mt-1'>
+                            <div className=' flex flex-row relative mt-1 w-full'>
                                 <input
-                                    className='mr-2 mt-2   w-[94vw] md:w-[32vw]  border-2 rounded focus:outline-gray-300  px-2 bg-gray-100  outline-gray-400 '
+                                    className='mr-2 mt-2  w-full  border-2 rounded border-gray-300 focus:outline-gray-400  px-2 bg-white  outline-gray-400 '
                                     type='text'
                                     placeholder='Search People'
                                     id='inputUsername'
@@ -215,7 +233,7 @@ function QuickChat(props) {
                                         </button>
                                         <nav
                                             tabIndex='0'
-                                            className=' border-1 backdrop-blur-lg bg-white bg-opacity-80  z-50 invisible border-gray-500 rounded w-full md:w-[30vw] right-5 absolute top-8 transition-all opacity-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-1 '
+                                            className=' border-1 backdrop-blur-lg bg-white bg-opacity-80  z-50 invisible border-gray-500 rounded w-full md:w-[20vw] right-5 absolute top-8 transition-all opacity-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-1 '
                                         >
                                             <ul className='py-2 '>
                                                 <li>
@@ -239,13 +257,14 @@ function QuickChat(props) {
                         </div>
                     </div>
 
-                    <div className='pt-2  rounded-[2rem] mb-1 mx-0 px-0 mt-3 bg-black bg-opacity-10'>
+                    <div className='  rounded-[2rem] mb-1 mx-0 px-0 mt-3 bg-[#f5f5f7]'>
                         {contact.length > 0
                             ? contact.map((item, ind) => {
                                   return (
                                       <div
                                           onClick={(e) => openChat(e, item)}
                                           key={ind + 'div'}
+                                          className=' first:pt-2 last:pb-2 '
                                       >
                                           <ChatInterface
                                               key={ind}

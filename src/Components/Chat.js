@@ -41,7 +41,6 @@ function Chat(props) {
     var imageAddress = '';
 
     const { state } = useLocation();
-    // console.log(props.data);
 
     if (state === null) {
         from = userId;
@@ -92,11 +91,10 @@ function Chat(props) {
                 { withCredentials: true }
             )
             .then((response) => {
-                setChats(response.data.chats);
+                // setChats(response.data.chats);
 
-                // var chat = decryptChat(response.data.chats, userId);
-
-                // setChats(chat);
+                var chat = decryptChat(userId, response.data.chats);
+                setChats(chat);
 
                 setPublicKey({
                     pk1: response.data.pk1,
@@ -109,46 +107,52 @@ function Chat(props) {
             .catch((er) => console.log(er));
     }, [chatName]);
 
-    // const checkStatus = () => {
-    //     socket.emit(
-    //         'is-online',
+    const checkStatus = () => {
+        socket.emit(
+            'is-online',
 
-    //         {
-    //             userId: to,
-    //             sendTo: from,
-    //         }
-    //     );
-    // };
+            {
+                userId: to,
+                sendTo: from,
+            }
+        );
+    };
 
-    // useEffect(() => {
-    //     setInterval(checkStatus, 10000);
+    useEffect(() => {
+        setInterval(checkStatus, 5000);
 
-    //     return () => {
-    //         clearInterval();
-    //     };
-    // });
+        return () => {
+            clearInterval();
+        };
+    });
 
-    // useEffect(() => {
-    //     const data = (info) => {
-    //         console.log(info.isOnline);
-    //         if (info.isOnline !== online) {
-    //             setOnline(info.isOnline);
-    //         }
-    //     };
-    //     socket.on('is-online', data);
+    useEffect(() => {
+        const data = (info) => {
+            console.log(info.isOnline);
+            if (info.isOnline !== online) {
+                setOnline(info.isOnline);
+            }
+        };
+        socket.on('is-online', data);
 
-    //     return () => {
-    //         socket.off('is-online', data);
-    //     };
-    // }, []);
+        return () => {
+            socket.off('is-online', data);
+        };
+    }, []);
 
     useEffect(() => {
         // for realtime communication of the two users
-        console.log('receiveing mesage useEFFECT');
-        // console.log('useeffect with socket in chat');
+
         var addMessage = (msg) => {
             if (msg.fromUserId === to) {
-                setChats((prev) => [...prev, msg]);
+                const decryptMsg = decryptMessage(
+                    localStorage.getItem('privateKey'),
+                    msg.message.split(' ')[1]
+                );
+
+                const obj = { ...msg, message: decryptMsg };
+
+                setChats((prev) => [...prev, obj]);
                 console.log(chats);
             }
         };
@@ -161,7 +165,7 @@ function Chat(props) {
     });
 
     const sendMsg = (e) => {
-        console.log('Send message function');
+        // console.log('Send message function');
 
         e.preventDefault();
         var msg = document.getElementById('userMsg').value;
@@ -185,7 +189,7 @@ function Chat(props) {
 
         setChats((prev) => [
             ...prev,
-            { fromUserId: from, toUserId: to, message: encrypMsg, time: today },
+            { fromUserId: from, toUserId: to, message: msg, time: today },
         ]);
 
         document.getElementById('userMsg').value = '';
@@ -227,12 +231,12 @@ function Chat(props) {
     };
 
     return (
-        <div>
+        <div className=''>
             <div className='w-full md:w-[60vw]   '>
                 <div className='flex-1'>
-                    <div className='flex flex-row  rounded-lg border-2 w-full md:w-[60vw] py-3 backdrop-blur-lg  z-10 absolute top-19 bg-black bg-opacity-10 '>
+                    <div className='flex flex-row  rounded-lg border-2 w-full md:w-[60vw] py-3 backdrop-blur-lg  z-10 absolute top-19 bg-black bg-opacity-20 '>
                         {/* <span> */}
-                        <div className='relative w-12 h-12 overflow-hidden bg-gray-500 rounded-full dark:bg-gray-300 ml-3 '>
+                        <div className='relative w-12 h-12 overflow-hidden  rounded-full dark:bg-gray-300 ml-3 '>
                             {imageAddress === '' || imageAddress === null ? (
                                 <svg
                                     className='absolute w-12 h-12 text-gray-400 -left-1'
@@ -277,7 +281,7 @@ function Chat(props) {
                             </span>
                         </div>
                     </div>
-                    <div className='flex flex-col last:pb-4 pt-2 border-2 rounded-t-[2rem] pb-20 h-screen overflow-y-auto   bg-[#f6f6f7] '>
+                    <div className='flex flex-col last:pb-4 pt-2 border-2 rounded-t-[2rem] pb-20 h-screen overflow-y-auto backdrop-blur-3xl bg-white bg-opacity-70 '>
                         {chats.length > 0
                             ? chats.map((item, ind) => (
                                   <div

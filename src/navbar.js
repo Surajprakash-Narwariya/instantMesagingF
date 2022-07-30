@@ -184,7 +184,7 @@ function NavBar() {
                 </div>
                 {/* <Link to='/chat'>Chat</Link> */}
             </nav>
-            {console.log(screenSize)}
+            {/* {console.log(screenSize)} */}
             <Routes>
                 <Route path='/signup' element={<Signup />} />
                 <Route exact path='/' element={<Home />} />
@@ -218,7 +218,7 @@ function Application() {
     }, [data]);
 
     const getData = (data) => {
-        console.log(data);
+        // console.log(data);
         setData(data);
     };
 

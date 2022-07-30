@@ -72,11 +72,17 @@ function Signup() {
     };
 
     return (
-        <div className='container mx-auto mt-12'>
-            <div className=' w-11/12 md:w-2/3 mx-auto px-5 py-12 backdrop-blur-sm border rounded-lg border-gray-300'>
+        <div className='container md:flex md:justify-end mt-10 '>
+            <div className='text-[#313132] text-3xl  w-11/12  md:text-6xl md:my-auto  md:w-1/2 md:px-12 mx-auto mb-10 font-semibold  '>
+                <div className='text-2xl md:text-5xl'>Ready to experience?</div>
+                <div className=' underline underline-offset-2'>Simple.</div>
+                <div className=' underline underline-offset-2'>Fast.</div>
+                <div className=' underline underline-offset-2'>Secure.</div>
+            </div>
+            <div className='md:flex md:flex-col  w-full md:w-1/2 px-10 pt-5 pb-10 backdrop-blur-lg border rounded-lg border-gray-300 bg-white bg-opacity-40 '>
                 <div className='flex flex-row justify-center'>
                     <div className='text-5xl mt-12 font-semibold'>
-                        <h1 className=''> Register</h1>
+                        <h1 className='text-customBlack'>Register</h1>
                     </div>
                 </div>
                 {response !== '' ? (
@@ -90,8 +96,8 @@ function Signup() {
                 ) : (
                     ''
                 )}
-                <div className=' md:flex md:flex-col md:justify-center  '>
-                    <div className='mx-auto mt-8 text-gray-600  '>
+                <div className=' md:flex md:flex-col md:justify-center '>
+                    <div className='mx-auto mt-8 text-gray-600 w-full '>
                         <div className='flex flex-col font-medium  text-xl'>
                             <div className=''>
                                 <label className='block mt-2 mb-1'>
@@ -99,7 +105,7 @@ function Signup() {
                                 </label>
                                 <input
                                     type='text'
-                                    className='block border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full md:w-96 px-2 py-1'
+                                    className='block border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full  px-2 py-1'
                                     onChange={utilUserId}
                                     required
                                 />
@@ -111,7 +117,7 @@ function Signup() {
                         </div>
                     </div>
 
-                    <div className=' mx-auto mt-2 text-gray-600  '>
+                    <div className=' mx-auto mt-2 text-gray-600  w-full'>
                         <div className='flex flex-col font-medium  text-xl'>
                             <div className=''>
                                 <label className='block mt-2 mb-1'>
@@ -119,7 +125,7 @@ function Signup() {
                                 </label>
                                 <input
                                     type='text'
-                                    className='block border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full md:w-96 px-2 py-1'
+                                    className='block border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full  px-2 py-1'
                                     aria-label='Username'
                                     aria-describedby='addon-wrapping'
                                     onChange={utilName}
@@ -129,7 +135,7 @@ function Signup() {
                         </div>
                     </div>
 
-                    <div className=' mx-auto mt-2 text-gray-600  '>
+                    <div className=' mx-auto mt-2 text-gray-600 w-full '>
                         <div className='flex flex-col font-medium  text-xl'>
                             <div className=''>
                                 <label className='block mt-2 mb-1'>
@@ -137,7 +143,7 @@ function Signup() {
                                 </label>
                                 <input
                                     type='text'
-                                    className='block border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full md:w-96 px-2 py-1'
+                                    className='block border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full px-2 py-1'
                                     aria-label='Username'
                                     aria-describedby='addon-wrapping'
                                     onChange={utilEmail}
@@ -151,7 +157,7 @@ function Signup() {
                         </div>
                     </div>
 
-                    <div className=' mx-auto mt-2 text-gray-600  '>
+                    <div className=' mx-auto mt-2 text-gray-600 w-full '>
                         <div className='flex flex-col font-medium  text-xl'>
                             <div className='grow'>
                                 <label className='block mt-2 mb-1'>
@@ -159,7 +165,7 @@ function Signup() {
                                 </label>
                                 <input
                                     type='password'
-                                    className='block  border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full md:w-96 px-2 py-1'
+                                    className='block  border rounded-md border-gray-300 focus:outline-none focus:border-gray-500 w-full  px-2 py-1'
                                     aria-label='Username'
                                     aria-describedby='addon-wrapping'
                                     onChange={utilPassword}

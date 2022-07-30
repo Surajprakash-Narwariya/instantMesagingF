@@ -1,110 +1,109 @@
 import { Buffer } from 'buffer';
-
 var cryptoBrowserify = require('crypto-browserify');
 
-function encryptMessage(publicKey, message) {
-    var currentPublicKey = localStorage.getItem('publicKey');
-    var receiverPublicKey =
-        publicKey.pk2 === currentPublicKey ? publicKey.pk1 : publicKey.pk2;
+/*
+    Encrypt --
+      (i) Encrypt message with |currentUser Public key| and then with |receiver public key|
+      (ii) add them with a " " between them
 
-    console.log(currentPublicKey);
-    console.log(receiverPublicKey);
-    console.log('==============');
-    console.log(publicKey);
+    Decrypt --
+      (i) if(sender is currentUser) decrypt the first part of msg else
+          decrypt the second part of message
 
-    // const encryptedData = cryptoBrowserify.publicEncrypt(
-    //     {
-    //         key:
-    //             '-----BEGIN PUBLIC KEY-----\n' +
-    //             receiverPublicKey +
-    //             '\n-----END PUBLIC KEY-----',
-    //         // padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-    //         oaepHash: 'sha256',
-    //     },
-    //     // We convert the data string to a buffer using `Buffer.from`
-    //     Buffer.from(message)
-    // );
 
-    const enc = cryptoBrowserify.publicEncrypt(
+*/
+
+// Function to Decrypt Chat
+function decryptChat(currentUser, chats) {
+    // const currentPublicKey = localStorage.getItem('publicKey');
+    const currentPrivateKey = localStorage.getItem('privateKey');
+    // const receiverPublicKey = currentPublicKey === pk.pk1 ? pk.pk2 : pk.pk1;
+
+    var decryptedChat = [];
+    for (var i = 0; i < chats.length; i++) {
+        const msg = chats[i].message.split(' ');
+
+        if (chats[i].fromUserId === currentUser) {
+            const val = decryptMessage(currentPrivateKey, msg[0]);
+            decryptedChat.push({ ...chats[i], message: val });
+        } else {
+            const val = decryptMessage(currentPrivateKey, msg[1]);
+            decryptedChat.push({ ...chats[i], message: val });
+        }
+    }
+    return decryptedChat;
+}
+
+// Function to decrypt Single Message
+function decryptMessage(privatekey, cipherCode) {
+    try {
+        const decryptData = cryptoBrowserify.privateDecrypt(
+            {
+                key:
+                    '-----BEGIN PRIVATE KEY-----\n' +
+                    privatekey +
+                    '\n-----END PRIVATE KEY-----',
+                oaepHash: 'sha256',
+                padding: cryptoBrowserify.constants.RSA_PKCS1_OAEP_PADDING,
+            },
+            Buffer.from(cipherCode, 'base64')
+        );
+        return decryptData.toString('utf-8');
+    } catch (err) {
+        console.log('There is an Error Decrypting the message', err);
+    }
+}
+
+// Function to Encrypt Single Message
+function encryptMessage(pk, message) {
+    const currentPublicKey = localStorage.getItem('publicKey');
+    const receiverPublicKey = currentPublicKey === pk.pk1 ? pk.pk2 : pk.pk1;
+
+    const encryptByCurrentPublicKey = cryptoBrowserify.publicEncrypt(
         {
             key:
                 '-----BEGIN PUBLIC KEY-----\n' +
                 currentPublicKey +
                 '\n-----END PUBLIC KEY-----',
-            // padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
             oaepHash: 'sha256',
+            padding: cryptoBrowserify.constants.RSA_PKCS1_OAEP_PADDING,
         },
-        // We convert the data string to a buffer using `Buffer.from`
         Buffer.from(message)
     );
 
-    // return enc.toString('base64') + ' ' + encryptedData.toString('base64');
-    // return enc + ' ' + encryptedData;
-    return enc.toString('base64');
-}
-
-function decryptMessage(privatekey, passphrase, cipherCode) {
-    const decryptData = cryptoBrowserify.privateDecrypt(
+    const encryptByReceiverPublicKey = cryptoBrowserify.publicEncrypt(
         {
             key:
-                '-----BEGIN ENCRYPTED PRIVATE KEY-----\n' +
-                privatekey +
-                '\n-----END ENCRYPTED PRIVATE KEY-----',
+                '-----BEGIN PUBLIC KEY-----\n' +
+                receiverPublicKey +
+                '\n-----END PUBLIC KEY-----',
             oaepHash: 'sha256',
-            passphrase: passphrase,
+            padding: cryptoBrowserify.constants.RSA_PKCS1_OAEP_PADDING,
         },
-        Buffer.from(cipherCode, 'base64')
+        Buffer.from(message)
     );
-    return decryptData.toString('utf-8');
+
+    return (
+        encryptByCurrentPublicKey.toString('base64') +
+        ' ' +
+        encryptByReceiverPublicKey.toString('base64')
+    );
 }
 
-function decryptChat(chats, currentUserId) {
-    var decryptedChat = [];
-    var currentPublicKey = localStorage.getItem('publicKey');
-    var currentPrivateKey = localStorage.getItem('privateKey');
-    // var receiverPublicKey = k2.pk2 === currentPublicKey ? k2.pk1 : k2.pk2;
+//============================================
 
-    for (var i = 0; i < chats.length; i++) {
-        if (chats[i].fromUserId === currentUserId) {
-            var toDecrypt = chats[i].message.split(' ');
-            console.log(toDecrypt);
-            var msg = decryptMessage(
-                currentPrivateKey,
-                currentUserId,
-                toDecrypt[0]
-            );
-            decryptedChat.push({ message: msg });
-        } else {
-            var toDecrypt = chats[i].message.split(' ');
-            console.log(toDecrypt);
-            var msg = decryptMessage(
-                currentPrivateKey,
-                currentUserId,
-                toDecrypt[1]
-            );
-            console.log(msg);
-            decryptedChat.push({ message: msg });
-        }
-    }
-    console.log('decryped cah:     ' + decryptChat);
+// const pk =
+//     'MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAOlX2FhcbfL1WWh6Qf8/3dZ3u2dbo9IDyvA0Ea6KRjW6vFeYD+H8z6QyGueLqIxx/uvWcKu9xgbWP/0tPCkqU7rnjdswxaW2Tgx86vEUn1FJJNwlWYTLDe+rrF8JlZYs9k87ahMDYBVQXjfxNYKEZzNy/rRcZrs8LAUKOiH8pqlzAgMBAAECgYAZ3ewUt4JUuZAEvfDM++Z6nOFAbu81G8iGYi9Hmvp3gFDaoPe5xI28FPXYjynLD+QDfs0UrL/kCCIlzbrqkU+gpUmynY0EcOVmKrWGjyFgUWDmUt7D7k4JvqzuQL304qHZATJiJ3ZITQDrXo8Ugt25EQMAPKv0CMgtjlpj7NuRiQJBAP48bpkN+jYHWgZb4EGdJCFm949A8p2LCL6jSctAjCsnQQHmyi1Nip4GPp/0GDPL/CpKnZ70emj7PkKIMC1uiB0CQQDq9k23RJWxMP0XmtNY17MQ73uEMTWANvav6PLvCmJTmrSdQZ/y2JWlOkFufJyZwEC8quISU5tk/t5Mye50AeLPAkBEggxbegS+omSD6iYYCDxAM/rpw1qdUWXd2Sp9drtOtZky5fn9EzQTOSOO/ru22XTuAIVQ3BhQScORMhmpZGuRAkBxJ9Fhs4wL27Xnyk6CeM7qFwt7LF/Bsba4HQ3yBSQ5c0YMffBT+e6HtjiQxz575VTIB9v8S3uI9h2FCbLm94mNAkB3+OUF4Bps+DnhpFfVxbF6oc1c7qrcxrGsNj6xGo79ycRK+D/UK4NZIC2HtOG2kbSCroCqi6vQM2my8rR6k1ID';
 
-    return chats;
-}
+// const pubk =
+//     'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDpV9hYXG3y9VloekH/P93Wd7tnW6PSA8rwNBGuikY1urxXmA/h/M+kMhrni6iMcf7r1nCrvcYG1j/9LTwpKlO6543bMMWltk4MfOrxFJ9RSSTcJVmEyw3vq6xfCZWWLPZPO2oTA2AVUF438TWChGczcv60XGa7PCwFCjoh/KapcwIDAQAB';
 
-const data = 'Surajprakash';
+// // const em = encryptMessage(pubk, 'Last Chance');
+// // console.log(em);
+// const cip =
+//     'IhNmOalhdsR8WnLbX/I2J1giaI6Lv8xSihpLe+ALrlFmBQT9fKJrrT8uiL24D/aLffbiagQgjpDX2C/MmcbNKTz5cfdBhEhPF2UnnuCeKLn//S2+AbwhjlSNJsrOTS4tjzC22aiUOjQSuq2mwPQbjZ05haI+H6UXi3MvW+Bbgqo=';
 
-const en = encryptMessage(localStorage.getItem('publicKey'), data);
-console.log(en);
-
-const e =
-    'MQHCtvBmkYWoslOLySeCDaiR/gnt8v/hA49EKzITcRujRCb05aTFn/88i5Goh1BUnywKB4gTRKv+04DxRySLlAZfDvHLHAVsZbJYKDwKq0n29J8g0M917p5FS5Zn5Fa0MfZCYE+rKXhhj3G/M/cor5fcW5FIyTTVVa8wUucKhKE=';
-
-const pk =
-    'MIIC3TBXBgkqhkiG9w0BBQ0wSjApBgkqhkiG9w0BBQwwHAQIsZ0BAoNRsXwCAggAMAwGCCqGSIb3DQIJBQAwHQYJYIZIAWUDBAEqBBCSncYHFbuZpuad6JG0X/ABBIICgDYPWcqcv6xbkqISHmJ5kdV6VVYiUUBVUEMLh2zfe6rSxKUjyLvd11ApoBA6mzwiqLctC8+W/EvADWh6KoNDRldTIKwWOxd66bLQ/lkHfJOMxpkdEXx2ig6EH9yyTicpe+7HQ441D1G2tb+kIkqrghauoM0MCHl/sW2afYzmxZYHP7YoCIC3WqkTRrH4cqjshwcT2vawX6Uhbg9OgSx14hmg+FW8nGOiuFfG5D8J9K/fWkHS7FsiI50gWh5/bAjd2L1b8M9jTdln+0WdKv6hMY5dWdCbqtKyjDi8MNVf+ch0LR2Dn26mrnnpVsPlpwFijTCd/JMZfkujpIztzzf6/MRWM73ivKIC7ZU1UELPOell0ID0RID/WlO6PPjDEplOaU0UEgbkD4+Xqhcb0uM5gyxdlDnNCmGSolBLTO7oMA0rme7+rnlv7hM4VjJvKJANzPr9cuMRO0gQXUCDuY54ALDvajVVO0MjlmkNtar5XZwwNRn90H1ROxiC5i+VjedrNfgKkWcHFmESfeliIo2Eilh/8m3rlrLWFC/0LCfCUfaow5SSZ8B4YlHole6sU5mPfVKX/3odblsDc9swUkDT4vLgRKi8PIbyWeZg5rtgRGVFMznN+5uorsKIwWJXvZwlxWphq400OH4Cjpk2npn205zcyiQbvLLeseKc8+8fpIyD4D74kDHqLx5Q/KfD0zYHslQ/63B5LK4HgIZC8jMhPWod9zjQbQAFesQfEUHbxXAT5D4Dfm1T8SsvGa8HEcMxilUOIYZp5Ghd0H5puq0g8viXSa0N6ZL4rb8E4fdG9BbR8r6jHwTKKdM8PyfG3K41eBy53/dLZGAiCzRROH7wiqw=';
-
-const d = decryptMessage(pk, 'Suraj99', e);
-
-console.log(d);
-console.log('dec');
+// const dm = decryptMessage(pk, cip);
+// console.log(dm);
 
 export { encryptMessage, decryptMessage, decryptChat };

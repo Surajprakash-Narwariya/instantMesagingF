@@ -18,7 +18,7 @@ function SingleMessage(props) {
     return (
         <div>
             {currentUser === from ? (
-                <div className='bg-blue-500 text-gray-900 px-2 py-1 rounded-lg  float-right ml-10   drop-shadow-lg md:mr-6 mr-2'>
+                <div className='bg-[#5386E4] text-gray-900 px-2 py-1 rounded-lg  float-right ml-10   drop-shadow-lg md:mr-6 mr-2'>
                     <span onClick={props.onClick} className='mr-1 text-white'>
                         {msg}
                     </span>
@@ -27,7 +27,7 @@ function SingleMessage(props) {
                     </span>
                 </div>
             ) : (
-                <div className='bg-gray-300 text-gray-900 px-2 py-1 rounded-lg float-left mr-10 drop-shadow-lg  md:ml-6 ml-2'>
+                <div className='bg-[#fed18c] text-gray-900 px-2 py-1 rounded-lg float-left mr-10 drop-shadow-lg  md:ml-6 ml-2'>
                     <span onClick={props.onClick} className='mr-1 '>
                         {msg}
                     </span>
